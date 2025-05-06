@@ -168,6 +168,8 @@ button.secondary {
 .overlay.show {
   opacity: 1;
   visibility: visible;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 10;
 }
 
 /* Модальные окна */
@@ -297,6 +299,9 @@ body {
   background: linear-gradient(270deg, #fef08a, #ffe08a, #ffc0cb, #a0e0ff, #fef08a);
   background-size: 1200% 1200%;
   animation: gradientShift 30s ease infinite;
+}
+.status-bar-fake.dark {
+  background: rgba(0, 0, 0, 0.6); /* Цвет для затемнения */
 }
 
 
