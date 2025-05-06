@@ -19,18 +19,6 @@ function hideModals() {
   loginModal.classList.remove('show');
   registerModal.classList.remove('show');
 }
-(function () {
-  const deviceWarning = document.getElementById('deviceWarning');
-
-  function isIphone() {
-    return /iPhone/i.test(navigator.userAgent) && !window.MSStream;
-  }
-
-  if (!isIphone()) {
-    deviceWarning.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-  }
-})();
 
 
   
