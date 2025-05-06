@@ -31,5 +31,18 @@ function hideModals() {
     document.body.style.overflow = 'hidden';
   }
 })();
+(function () {
+  const deviceWarning = document.getElementById('deviceWarning');
+
+  // Функция точной проверки на iPhone
+  function isIphone() {
+    return /iPhone/i.test(navigator.userAgent) && !window.MSStream;
+  }
+
+  if (!isIphone()) {
+    deviceWarning.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+})();
 
   
