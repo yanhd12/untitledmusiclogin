@@ -21,20 +21,7 @@ function hideModals() {
 }
 (function () {
   const deviceWarning = document.getElementById('deviceWarning');
-  const userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
-  const isIOS = /iPhone|iPad|iPod/i.test(userAgent);
-  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
-
-  if (!isIOS) {
-    deviceWarning.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-  }
-})();
-(function () {
-  const deviceWarning = document.getElementById('deviceWarning');
-
-  // Функция точной проверки на iPhone
   function isIphone() {
     return /iPhone/i.test(navigator.userAgent) && !window.MSStream;
   }
@@ -44,5 +31,6 @@ function hideModals() {
     document.body.style.overflow = 'hidden';
   }
 })();
+
 
   
