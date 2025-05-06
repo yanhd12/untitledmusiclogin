@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Untitled Music</title>
   <link rel="manifest" href="manifest.json">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#fef08a">
   <meta name="apple-mobile-web-app-title" content="Untitled Music">
   <style>
@@ -14,11 +14,17 @@
       margin: 0;
       padding: 0;
       height: 100%;
+      width: 100%;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       overflow-x: hidden;
       background: linear-gradient(270deg, #fef08a, #ffe08a, #fef08a);
       background-size: 600% 600%;
       animation: gradientShift 20s ease infinite;
+      box-sizing: border-box;
+    }
+
+    *, *::before, *::after {
+      box-sizing: inherit;
     }
 
     @keyframes gradientShift {
@@ -29,6 +35,7 @@
 
     body {
       position: relative;
+      max-width: 100vw;
     }
 
     .animated-bg {
@@ -41,8 +48,10 @@
 
     .bubble {
       position: absolute;
-      width: 300px;
-      height: 300px;
+      width: 60vw;
+      height: 60vw;
+      max-width: 300px;
+      max-height: 300px;
       border-radius: 50%;
       filter: blur(80px);
       animation: bubbleMove 10s ease-in-out infinite alternate, float 30s ease-in-out infinite;
@@ -110,7 +119,7 @@
       padding: 20px;
       border-top-left-radius: 20px;
       border-top-right-radius: 20px;
-      position: fixed;
+      position: absolute;
       bottom: 0;
       left: 0;
       width: 100%;
@@ -175,6 +184,7 @@
       z-index: 20;
       padding: 30px 20px;
       overflow-y: auto;
+      max-width: 100vw;
     }
 
     .modal.show {
@@ -185,6 +195,7 @@
       max-width: 400px;
       margin: 0 auto;
       width: 100%;
+      box-sizing: border-box;
     }
 
     .modal-content input {
@@ -233,107 +244,62 @@
     <div class="bubble red"></div>
     <div class="bubble green"></div>
   </div>
-
   <div class="center">
     <div class="logo">U</div>
     <h1>Untitled Music</h1>
-    <p>Free musical experiment</p>
+    <p>Stream your world</p>
   </div>
-
   <div class="button-container">
-    <button onclick="showModal('login')">Login</button>
-    <button class="secondary" onclick="showModal('register')">Create Account</button>
+    <button onclick="showLogin()">Login</button>
+    <button class="secondary" onclick="showRegister()">Create Account</button>
   </div>
 
-  <div class="overlay" id="overlay" onclick="hideModal()"></div>
+  <div class="overlay" id="overlay" onclick="hideModals()"></div>
 
-  <div class="modal" id="modal">
-    <div class="modal-content" id="modalContent">
-      <h2 id="modalTitle"></h2>
-      <label for="email">E-Mail</label>
-      <input type="email" id="email" placeholder="E-Mail" />
-      <label for="password">Password</label>
-      <input type="password" id="password" placeholder="Password" />
-      <div id="extraFields"></div>
-      <button id="submitBtn"></button>
+  <div class="modal" id="loginModal">
+    <div class="modal-content">
+      <h2>Login</h2>
+      <input type="email" placeholder="Email">
+      <input type="password" placeholder="Password">
+      <button>Sign In</button>
     </div>
   </div>
 
-  <div class="install-instruction" id="installPrompt" style="display:none">
-    To install the app, tap <strong>Share</strong> and select <strong>Add to Home Screen</strong>.
+  <div class="modal" id="registerModal">
+    <div class="modal-content">
+      <h2>Create Account</h2>
+      <input type="text" placeholder="Username">
+      <input type="email" placeholder="Email">
+      <input type="password" placeholder="Password">
+      <input type="text" placeholder="Invite Code">
+      <div class="checkbox">
+        <input type="checkbox" id="terms">
+        <label for="terms">I agree to the Terms of Service</label>
+      </div>
+      <button>Sign Up</button>
+    </div>
   </div>
 
   <script>
-    const submitBtn = document.getElementById("submitBtn");
+    const overlay = document.getElementById('overlay');
+    const loginModal = document.getElementById('loginModal');
+    const registerModal = document.getElementById('registerModal');
 
-    function showModal(type) {
-      const modal = document.getElementById("modal");
-      const overlay = document.getElementById("overlay");
-      const title = document.getElementById("modalTitle");
-      const extraFields = document.getElementById("extraFields");
-
-      if (type === "login") {
-        title.innerText = "Login";
-        submitBtn.innerText = "Sign In";
-        extraFields.innerHTML = "";
-        submitBtn.onclick = function () {
-          const email = document.getElementById("email").value;
-          const password = document.getElementById("password").value;
-          console.log("Login:", email, password);
-          hideModal();
-        };
-      } else {
-        title.innerText = "Create Account";
-        submitBtn.innerText = "Register";
-        extraFields.innerHTML = `
-          <label for="code">Invitation Code</label>
-          <input type="text" id="code" placeholder="Invitation Code" />
-          <div class="checkbox">
-            <input type="checkbox" id="agree" />
-            <label for="agree">I accept the <a href="#" onclick="showTerms(event)">Terms</a></label>
-          </div>
-        `;
-        submitBtn.onclick = function () {
-          const email = document.getElementById("email").value;
-          const password = document.getElementById("password").value;
-          const code = document.getElementById("code").value;
-          const agree = document.getElementById("agree").checked;
-
-          if (!agree) {
-            alert("You must accept the user agreement to register.");
-            return;
-          }
-
-          console.log("Register:", email, password, code, agree);
-          hideModal();
-        };
-      }
-
-      modal.classList.add("show");
-      overlay.classList.add("show");
+    function showLogin() {
+      overlay.classList.add('show');
+      loginModal.classList.add('show');
     }
 
-    function hideModal() {
-      const modal = document.getElementById("modal");
-      const overlay = document.getElementById("overlay");
-
-      modal.classList.remove("show");
-      overlay.classList.remove("show");
+    function showRegister() {
+      overlay.classList.add('show');
+      registerModal.classList.add('show');
     }
 
-    function showTerms(event) {
-      event.preventDefault();
-      alert("Terms placeholder – insert your terms here.");
+    function hideModals() {
+      overlay.classList.remove('show');
+      loginModal.classList.remove('show');
+      registerModal.classList.remove('show');
     }
-
-    window.addEventListener('load', () => {
-      const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
-      const isInStandaloneMode = ('standalone' in window.navigator) && window.navigator.standalone;
-      if (isIos && !isInStandaloneMode) {
-        document.getElementById("installPrompt").style.display = "block";
-      }
-    });
   </script>
 </body>
 </html>
-
