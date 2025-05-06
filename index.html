@@ -4,24 +4,75 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Untitled Music</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Untitled Music">
   <style>
-    body, html {
+    html, body {
       margin: 0;
       padding: 0;
       height: 100%;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       overflow-x: hidden;
-      background: radial-gradient(circle at 30% 60%, rgba(255, 0, 0, 0.4), transparent 30%),
-                  radial-gradient(circle at 70% 70%, rgba(0, 255, 0, 0.3), transparent 30%),
-                  #fef08a;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+      background: linear-gradient(270deg, #fef08a, #ffe08a, #fef08a);
+      background-size: 600% 600%;
+      animation: gradientShift 20s ease infinite;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    body {
+      position: relative;
+    }
+
+    .animated-bg {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .bubble {
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      filter: blur(80px);
+      animation: bubbleMove 10s ease-in-out infinite alternate, float 30s ease-in-out infinite;
+    }
+
+    .bubble.red {
+      background: rgba(255, 0, 0, 0.4);
+      left: 10%;
+      top: 50%;
+    }
+
+    .bubble.green {
+      background: rgba(0, 255, 0, 0.3);
+      right: 10%;
+      bottom: 20%;
+    }
+
+    @keyframes bubbleMove {
+      0% { transform: translateY(0px); }
+      100% { transform: translateY(-30px); }
+    }
+
+    @keyframes float {
+      0% { transform: translateX(0); }
+      50% { transform: translateX(20px); }
+      100% { transform: translateX(0); }
     }
 
     .center {
       text-align: center;
-      margin-top: 25vh;
+      margin-top: 20vh;
       color: white;
       z-index: 1;
       position: relative;
@@ -57,7 +108,10 @@
       padding: 20px;
       border-top-left-radius: 20px;
       border-top-right-radius: 20px;
-      position: relative;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
       z-index: 1;
     }
 
@@ -68,7 +122,7 @@
       border-radius: 12px;
       font-size: 16px;
       font-weight: 500;
-      border: 2px solid black;
+      border: none;
       width: 90%;
       max-width: 320px;
       cursor: pointer;
@@ -108,8 +162,8 @@
       bottom: 0;
       left: 0;
       width: 100%;
-      height: 90%; /* Stop a bit below the top */
-      background: #111;
+      height: 85%;
+      background: #000;
       color: white;
       border-top-left-radius: 20px;
       border-top-right-radius: 20px;
@@ -117,52 +171,71 @@
       transition: transform 0.4s ease;
       transform: translateY(100%);
       z-index: 20;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      padding-top: 15vh;
+      padding: 30px 20px;
+      overflow-y: auto;
     }
 
     .modal.show {
-      transform: translateY(10%); /* Leaves some space at the top */
+      transform: translateY(15%);
     }
 
     .modal-content {
       max-width: 400px;
-      width: 90%;
-      text-align: center;
+      margin: 0 auto;
+      width: 100%;
     }
 
     .modal-content input {
       width: 100%;
-      padding: 12px;
+      padding: 14px;
       margin: 10px 0;
       font-size: 16px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
     }
 
-    .close, .back-btn {
-      font-size: 24px;
-      cursor: pointer;
+    .modal-content label {
+      font-weight: bold;
+      display: block;
+      margin-top: 10px;
+    }
+
+    .modal-content .checkbox {
+      display: flex;
+      align-items: center;
+      margin: 10px 0;
+    }
+
+    .modal-content .checkbox input {
+      width: auto;
+      margin-right: 10px;
+    }
+
+    .install-instruction {
       position: absolute;
       top: 10px;
-    }
-
-    .close {
-      right: 20px;
-    }
-
-    .back-btn {
-      left: 20px;
+      left: 10px;
+      background: rgba(0,0,0,0.6);
+      color: white;
+      padding: 10px;
+      border-radius: 10px;
+      font-size: 14px;
+      z-index: 50;
     }
   </style>
 </head>
 <body>
+  <div class="animated-bg">
+    <div class="bubble red"></div>
+    <div class="bubble green"></div>
+  </div>
+
   <div class="center">
     <div class="logo">U</div>
     <h1>Untitled Music</h1>
-    <p>This is official figma prototype</p>
+    <p>Свободный музыкальный эксперимент</p>
   </div>
 
   <div class="button-container">
@@ -174,28 +247,64 @@
 
   <div class="modal" id="modal">
     <div class="modal-content" id="modalContent">
-      <span class="back-btn" onclick="hideModal()">←</span>
-      <span class="close" onclick="hideModal()">×</span>
       <h2 id="modalTitle"></h2>
-      <input type="text" placeholder="Email" />
-      <input type="password" placeholder="Password" />
+      <label for="email">E-Mail</label>
+      <input type="email" id="email" placeholder="E-Mail" />
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="Password" />
+      <div id="extraFields"></div>
       <button id="submitBtn"></button>
     </div>
   </div>
 
+  <div class="install-instruction" id="installPrompt" style="display:none">
+    To install the app, tap <strong>Share</strong> and select <strong>Add to Home Screen</strong>.
+  </div>
+
   <script>
+    const submitBtn = document.getElementById("submitBtn");
+
     function showModal(type) {
       const modal = document.getElementById("modal");
       const overlay = document.getElementById("overlay");
       const title = document.getElementById("modalTitle");
-      const submitBtn = document.getElementById("submitBtn");
+      const extraFields = document.getElementById("extraFields");
 
       if (type === "login") {
         title.innerText = "Login";
-        submitBtn.innerText = "Login";
+        submitBtn.innerText = "Sign In";
+        extraFields.innerHTML = "";
+        submitBtn.onclick = function () {
+          const email = document.getElementById("email").value;
+          const password = document.getElementById("password").value;
+          console.log("Login:", email, password);
+          hideModal();
+        };
       } else {
         title.innerText = "Create Account";
         submitBtn.innerText = "Register";
+        extraFields.innerHTML = `
+          <label for="code">Invitation Code</label>
+          <input type="text" id="code" placeholder="Invitation Code" />
+          <div class="checkbox">
+            <input type="checkbox" id="agree" />
+            <label for="agree">I accept the user agreement</label>
+          </div>
+        `;
+        submitBtn.onclick = function () {
+          const email = document.getElementById("email").value;
+          const password = document.getElementById("password").value;
+          const code = document.getElementById("code").value;
+          const agree = document.getElementById("agree").checked;
+
+          if (!agree) {
+            alert("You must accept the user agreement to register.");
+            return;
+          }
+
+          console.log("Register:", email, password, code, agree);
+          hideModal();
+        };
       }
 
       modal.classList.add("show");
@@ -209,6 +318,14 @@
       modal.classList.remove("show");
       overlay.classList.remove("show");
     }
+
+    window.addEventListener('load', () => {
+      const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+      const isInStandaloneMode = ('standalone' in window.navigator) && window.navigator.standalone;
+      if (isIos && !isInStandaloneMode) {
+        document.getElementById("installPrompt").style.display = "block";
+      }
+    });
   </script>
 </body>
 </html>
