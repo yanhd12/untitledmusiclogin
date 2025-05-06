@@ -13,12 +13,19 @@
     html, body {
       margin: 0;
       padding: 0;
+      padding-bottom: env(safe-area-inset-bottom);
       height: 100%;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       overflow-x: hidden;
       background: linear-gradient(270deg, #fef08a, #ffe08a, #fef08a);
       background-size: 600% 600%;
       animation: gradientShift 20s ease infinite;
+    }
+
+    @supports (height: 100dvh) {
+      html, body {
+        height: 100dvh;
+      }
     }
 
     @keyframes gradientShift {
