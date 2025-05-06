@@ -22,22 +22,10 @@
       animation: gradientShift 20s ease infinite;
     }
 
-    @supports (height: 100dvh) {
-      html, body {
-        height: 100dvh;
-      }
-    }
-
     @keyframes gradientShift {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
-    }
-
-    body {
-      position: relative;
-      max-width: 100vw;
-      overflow-x: hidden;
     }
 
     .animated-bg {
@@ -123,7 +111,7 @@
       bottom: 0;
       left: 0;
       width: 100%;
-      z-index: 1;
+      z-index: 5;
       box-sizing: border-box;
     }
 
@@ -180,15 +168,15 @@
       border-top-left-radius: 20px;
       border-top-right-radius: 20px;
       box-shadow: 0 -4px 20px rgba(0,0,0,0.4);
-      transition: transform 0.4s ease;
       transform: translateY(100%);
+      transition: transform 0.4s ease;
       z-index: 20;
       padding: 30px 20px;
       overflow-y: auto;
     }
 
     .modal.show {
-      transform: translateY(15%);
+      transform: translateY(0%);
     }
 
     .modal-content {
@@ -224,18 +212,6 @@
       width: auto;
       margin-right: 10px;
     }
-
-    .install-instruction {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      background: rgba(0,0,0,0.6);
-      color: white;
-      padding: 10px;
-      border-radius: 10px;
-      font-size: 14px;
-      z-index: 50;
-    }
   </style>
 </head>
 <body>
@@ -243,11 +219,13 @@
     <div class="bubble red"></div>
     <div class="bubble green"></div>
   </div>
+
   <div class="center">
     <div class="logo">U</div>
     <h1>Untitled Music</h1>
     <p>Stream your world</p>
   </div>
+
   <div class="button-container">
     <button onclick="showLogin()">Login</button>
     <button class="secondary" onclick="showRegister()">Create Account</button>
@@ -260,10 +238,6 @@
       <h2>Login</h2>
       <input type="email" placeholder="Email">
       <input type="password" placeholder="Password">
-      <div class="checkbox">
-        <input type="checkbox" id="login-terms">
-        <label for="login-terms">I agree to the Terms of Service</label>
-      </div>
       <button>Sign In</button>
     </div>
   </div>
@@ -291,11 +265,13 @@
     function showLogin() {
       overlay.classList.add('show');
       loginModal.classList.add('show');
+      registerModal.classList.remove('show');
     }
 
     function showRegister() {
       overlay.classList.add('show');
       registerModal.classList.add('show');
+      loginModal.classList.remove('show');
     }
 
     function hideModals() {
