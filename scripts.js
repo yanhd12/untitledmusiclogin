@@ -19,5 +19,17 @@ function hideModals() {
   loginModal.classList.remove('show');
   registerModal.classList.remove('show');
 }
+(function () {
+  const deviceWarning = document.getElementById('deviceWarning');
+  const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+  const isIOS = /iPhone|iPad|iPod/i.test(userAgent);
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
+
+  if (!isIOS) {
+    deviceWarning.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+})();
 
   
